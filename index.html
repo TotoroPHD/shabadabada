@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Shabadabada Maison - TotoroPHD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<style>
+  body,
+  h1,
+  h2,
+  h3,
+  p,
+  div {
+    font-family: 'Poppins', sans-serif;
+  }
+</style>
+
+<body>
+  <div class="w3-center">
+    <h3>Trouvez des chansons avec le mot ci-dessous dans les paroles :</h3>
+    <h1 id="random-word" onclick="displayRandomWord();">Cliquer ici</h1>
+    <p onclick="resetCD();"> 
+      Temps restant : <span id="countdown"></span>
+    </p>
+  </div>
+
+  <div class="w3-center w3-border" style="margin-top: 200px;">
+    <h3>Fonctionnement :</h3>
+    <p>Cliquer sur "Cliquer ici" ou le dernier mot affiché pour changer de mot et reset le compte à rebours.</p>
+    <p>Cliquer sur "Temps restant" à chaque fois que quelqu'un trouve pour reset le compte à rebours.</p>
+    <h3>Configuration :</h3>
+
+    <p>
+      <label> Fond coloré</label>
+      <input id="background-color" class="w3-check" type="checkbox">
+
+    </p>
+
+    <p>
+      Durée max en secondes : <input id="configMaxCountdown" class="w3-input w3-center" type="text">
+    </p>
+
+    <p>
+      <label>Liste de mots : </label>
+      <br>
+      <textarea onchange="refreshWords()" id="words" cols="60" rows="100">
+ENFANT
+JAMAIS
+TOUJOURS
+CHANTEUR / CHANTEUSE / CHANSON
+POISSON
+OISEAU
+RUE
+ROUTE
+CHEMIN
+TERRE
+MER
+MAL
+BATEAU
+NAVIRE / MARIN / MATELOT
+GENS
+PERSONNE
+AIMER
+TEMPS
+PETIT(E)
+GRAND(E)
+COUP
+CIEL
+GUEULE
+ARBRE
+DEMAIN
+HISTOIRE
+TÊTE
+CHAPEAU
+AMOUR
+FLEUR
+SOLEIL
+MONDE
+PAYS
+BOIRE
+PLEURER
+UN NOM DE PAYS
+UN NOM DE VÊTEMENT
+BOIS
+AIR
+ROSE
+BLEU(E)
+NUIT / JOUR
+HEUREUX / HEUREUSE
+PAUVRE
+EAU
+VIN
+TRISTE
+MOT
+OUBLIER
+NON
+CHEVEUX
+OEIL / YEUX
+BLANC(HE)
+NOIR(E)
+SEUL(E)
+VIEUX / VIEILLE
+VIE
+MORT(E)
+UN PRÉNOM MASCULIN
+UN PRÉNOM FÉMININ
+ARGENT
+MADAME / MESDAMES
+ROI / REINE
+SOIR
+MATIN</textarea>
+    </p>
+
+  </div>
+</body>
+
+<script>
+  // Tableau de mots aléatoires
+  var words = []
+  var maxCountdown = 30; // Durée du compte à rebours en secondes
+  var countdown = maxCountdown;
+  var pause = true;
+
+  var configMaxCountdown = document.getElementById("configMaxCountdown");
+  configMaxCountdown.value = maxCountdown;
+  configMaxCountdown.addEventListener("change", function () {
+    if (!isNaN(configMaxCountdown.value)) {
+      maxCountdown = configMaxCountdown.value;
+      document.getElementById("countdown").textContent = maxCountdown;
+    }
+    else configMaxCountdown.value = maxCountdown;
+  })
+
+  var configWords = document.getElementById("words");
+  var words = configWords.value.split('\n');
+  console.log(words);
+
+
+  document.getElementById("countdown").textContent = maxCountdown;
+
+  function refreshWords() {
+    words = configWords.value.split('\n').filter(n => n);
+    document.getElementById("random-word").textContent = "Cliquer ici";
+  }
+
+
+  // Fonction qui choisit un mot aléatoire dans la liste
+  function getRandomWord() {
+    var randomIndex = Math.floor(Math.random() * words.length);
+    return words[randomIndex];
+  }
+
+  // Fonction qui affiche un mot aléatoire et lance le compte à rebours
+  function displayRandomWord() {
+    var word = getRandomWord();
+    document.getElementById("random-word").textContent = word;
+    countdown = maxCountdown;
+    document.getElementById("countdown").textContent = maxCountdown;
+    pause = false;
+    if (document.getElementById("background-color").checked) {
+      document.body.style.backgroundColor = "rgb(0,255,0)";
+    }
+    else {
+      document.body.style.backgroundColor = "";
+    }
+  }
+
+  function resetCD()
+  {
+    countdown = maxCountdown;
+    document.getElementById("countdown").textContent = countdown;
+  }
+
+  document.getElementById("background-color").addEventListener("change", function () {
+    if (document.getElementById("background-color").checked) {
+      var red = 255 * (maxCountdown - countdown) / maxCountdown
+      var green = 255 - red;
+      document.body.style.backgroundColor = "rgb(0,255,0)";
+      document.getElementById("countdown").textContent = countdown;
+    }
+    else {
+      document.body.style.backgroundColor = "";
+    }
+  })
+  // Fonction qui gère le compte à rebours
+  setInterval(function () {
+    if (!pause) {
+      countdown--;
+      document.getElementById("countdown").textContent = countdown;
+
+      if (document.getElementById("background-color").checked) {
+        var red = 255 * (maxCountdown - countdown) / maxCountdown
+        var green = 255 - red;
+        document.body.style.backgroundColor = "rgb(" + red + "," + green + ",0)";
+      }
+      else {
+        document.body.style.backgroundColor = "";
+      }
+
+      // Si le compte à rebours est terminé, affiche un nouveau mot aléatoire
+      if (countdown == 0) {
+        pause = true;
+      }
+    }
+  }, 1000);
+
+</script>
+</body>
+
+</html>
