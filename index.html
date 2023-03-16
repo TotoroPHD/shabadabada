@@ -29,6 +29,9 @@
     <p onclick="resetCD();"> 
       Temps restant : <span id="countdown"></span>
     </p>
+    <p onclick="pauseCD();"> 
+      Pause
+    </p>    
   </div>
 
   <div class="w3-center w3-border" style="margin-top: 200px;">
@@ -174,8 +177,16 @@ MATIN</textarea>
 
   function resetCD()
   {
+    pause = false;
     countdown = maxCountdown;
     document.getElementById("countdown").textContent = countdown;
+
+    if (document.getElementById("background-color").checked) {
+      document.body.style.backgroundColor = "rgb(0,255,0)";
+    }
+    else {
+      document.body.style.backgroundColor = "";
+    }
   }
 
   document.getElementById("background-color").addEventListener("change", function () {
@@ -189,6 +200,11 @@ MATIN</textarea>
       document.body.style.backgroundColor = "";
     }
   })
+
+  function pauseCD()
+  {
+    pause = !pause;
+  }
   // Fonction qui gère le compte à rebours
   setInterval(function () {
     if (!pause) {
